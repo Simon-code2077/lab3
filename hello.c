@@ -51,7 +51,8 @@ void change_ball_position()
   unsigned short x, y;
   x = vla.position.x;
   y = vla.position.y;
-  printf("Current position: %02x %02x %02x\n",);
+  printf("Current position: %02x %02x\n",
+         x, y); // Print current position for debugging
   // Move the ball in a simple pattern
   x += 10; // Move right
   if (x > 639) { // Wrap around
