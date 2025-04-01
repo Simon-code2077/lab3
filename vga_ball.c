@@ -153,7 +153,7 @@ static struct miscdevice vga_ball_misc_device = {
 static int __init vga_ball_probe(struct platform_device *pdev)
 {
         vga_ball_color_t beige = { 0x00, 0x00, 0x00 };
-		vga_ball_position_t initial_position = {0x16, 0x16 }; // Center of the screen
+		vga_ball_position_t initial_position = {240, 160 }; // Center of the screen
 	int ret;
 
 	/* Register ourselves as a misc device: creates /dev/vga_ball */
