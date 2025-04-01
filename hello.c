@@ -113,12 +113,12 @@ int main()
   printf("initial state: \n");
   print_background_color();
 
-  // for (i = 0 ; i < 24 ; i++) {
-  //   set_background_color(&colors[i % COLORS ]);
-  //   print_background_color();
-  //   change_ball_position();
-  //   usleep(400000);
-  // }
+  for (i = 0 ; i < 24 ; i++) {
+    set_background_color(&colors[i % COLORS ]);
+    print_background_color();
+    change_ball_position();
+    usleep(400000);
+  }
 
   set_background_color(&colors[0]); // set to first color
   printf("First state: RED\n");
