@@ -4,7 +4,7 @@
 #include <linux/ioctl.h>
 
 typedef struct {
-  unsigned short red, green, blue;
+  unsigned char red, green, blue;
 } vga_ball_color_t;
 
 typedef struct {

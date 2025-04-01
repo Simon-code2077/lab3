@@ -37,11 +37,12 @@
 
 /* Device registers */
 #define BG_RED(x) (x)
-#define BG_GREEN(x) ((x)+2)
-#define BG_BLUE(x) ((x)+4)
-#define BALL_X(x) ((x)+6)  /* Ball X coordinate */
-#define BALL_Y(x) ((x)+8)  /* Ball Y coordinate */
-
+#define BG_GREEN(x) ((x)+1)
+#define BG_BLUE(x) ((x)+2)
+#define BALL_X_LOW(x) ((x)+3)  /* Ball X coordinate */
+#define BALL_X_HIGH(x) ((x)+4) /* Ball X coordinate */
+#define BALL_Y_HIGH(x) ((x)+5)  /* Ball Y coordinate */
+#define BALL_Y_LOW(x) ((x)+6)  /* Ball Y coordinate */
 /*
  * Information about our device
  */
@@ -58,9 +59,9 @@ struct vga_ball_dev {
  */
 static void write_background(vga_ball_color_t *background)
 {
-	iowrite16(background->red, BG_RED(dev.virtbase) );
-	iowrite16(background->green, BG_GREEN(dev.virtbase) );
-	iowrite16(background->blue, BG_BLUE(dev.virtbase) );
+	iowrite8(background->red, BG_RED(dev.virtbase) );
+	iowrite8(background->green, BG_GREEN(dev.virtbase) );
+	iowrite8(background->blue, BG_BLUE(dev.virtbase) );
 	dev.background = *background;
 }
 
@@ -69,8 +70,10 @@ static void write_background(vga_ball_color_t *background)
  */
 static void write_position(vga_ball_position_t *position)
 {
-	iowrite16(position->x, BALL_X(dev.virtbase));
-	iowrite16(position->y, BALL_Y(dev.virtbase));
+	iowrite8((unsigned char)(position->x & 0xFF), BALL_X_LOW(dev.virtbase));
+	iowrite8((unsigned char)(position->y & 0xFF), BALL_Y_LOW(dev.virtbase));
+	iowrite8((unsigned char)((position->x >> 8) & 0x03), BALL_X_HIGH(dev.virtbase));
+	iowrite8((unsigned char)((position->y >> 8) & 0x01), BALL_Y_HIGH(dev.virtbase));
 	dev.position = *position;
 }
 
@@ -149,7 +152,7 @@ static struct miscdevice vga_ball_misc_device = {
  */
 static int __init vga_ball_probe(struct platform_device *pdev)
 {
-        vga_ball_color_t beige = { 0x0000, 0x0000, 0x0000 };
+        vga_ball_color_t beige = { 0x00, 0x00, 0x00 };
 		vga_ball_position_t initial_position = {0x16, 0x16 }; // Center of the screen
 	int ret;
 
