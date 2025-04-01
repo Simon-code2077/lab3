@@ -74,6 +74,13 @@ static void write_position(vga_ball_position_t *position)
 	dev.position = *position;
 }
 
+static void init_position(vga_ball_position_t *position)
+{
+	iowrite16('0010', BALL_X(dev.virtbase));
+	iowrite16(position->y, BALL_Y(dev.virtbase));
+	dev.position = *position;
+}
+
 /*
  * Handle ioctl() calls from userspace:
  * Read or write the segments on single digits.
@@ -89,6 +96,7 @@ static long vga_ball_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
 				   sizeof(vga_ball_arg_t)))
 			return -EACCES;
 		write_background(&vla.background);
+		init_position(&dev.position); // Ensure position is initialized
 		break;
 
 	case VGA_BALL_READ_BACKGROUND:
