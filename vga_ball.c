@@ -74,17 +74,17 @@ static void write_position(vga_ball_position_t *position)
 	dev.position = *position;
 }
 
-static void read_background(vga_ball_color_t *background)
-{
-    background->red = ioread16(BG_RED(dev.virtbase));
-    background->green = ioread16(BG_GREEN(dev.virtbase));
-    background->blue = ioread16(BG_BLUE(dev.virtbase));
-}
-static void read_position(vga_ball_position_t *position)
-{
-    position->x = ioread16(BALL_X(dev.virtbase));
-    position->y = ioread16(BALL_Y(dev.virtbase));
-}
+// static void read_background(vga_ball_color_t *background)
+// {
+//     background->red = ioread16(BG_RED(dev.virtbase));
+//     background->green = ioread16(BG_GREEN(dev.virtbase));
+//     background->blue = ioread16(BG_BLUE(dev.virtbase));
+// }
+// static void read_position(vga_ball_position_t *position)
+// {
+//     position->x = ioread16(BALL_X(dev.virtbase));
+//     position->y = ioread16(BALL_Y(dev.virtbase));
+// }
 /*
  * Handle ioctl() calls from userspace:
  * Read or write the segments on single digits.
@@ -103,7 +103,7 @@ static long vga_ball_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
 		break;
 
 	case VGA_BALL_READ_BACKGROUND:
-	  	read_background(&vla.background);
+	  	vla.background = dev.background;
 		if (copy_to_user((vga_ball_arg_t *) arg, &vla,
 				 sizeof(vga_ball_arg_t)))
 			return -EACCES;
@@ -117,7 +117,7 @@ static long vga_ball_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
 		break;
 
 	case VGA_BALL_GET_POSITION:
-		read_position(&vla.position);
+		vla.position = dev.position;
 		if (copy_to_user((vga_ball_arg_t *) arg, &vla,
 				 sizeof(vga_ball_arg_t)))
 			return -EACCES;
