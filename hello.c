@@ -25,7 +25,7 @@ void print_background_color() {
       perror("ioctl(VGA_BALL_READ_BACKGROUND) failed");
       return;
   }
-  printf("%02x %02x %02x\n",
+  printf("%04x %04x %04x\n",
 	 vla.background.red, vla.background.green, vla.background.blue);
 }
 
@@ -110,7 +110,7 @@ int main()
     return -1;
   }
 
-  printf("initial state: ");
+  printf("initial state: \n");
   print_background_color();
 
   // for (i = 0 ; i < 24 ; i++) {
@@ -121,7 +121,7 @@ int main()
   // }
 
   set_background_color(&colors[0]); // set to first color
-  printf("First state: RED");
+  printf("First state: RED\n");
   print_background_color();
 
   usleep(400000);
