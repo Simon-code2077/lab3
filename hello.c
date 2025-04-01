@@ -68,7 +68,7 @@ void change_ball_position()
   x += 100; // Move right
   if (x > 639) { // Wrap around
       x = 0;
-      y += 10; // Move down
+      y += 50; // Move down
       if (y > 479) {
           y = 0; // Wrap vertically
       }
