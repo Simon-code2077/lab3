@@ -168,6 +168,8 @@ static int __init vga_ball_probe(struct platform_device *pdev)
         
 	/* Set an initial color */
         write_background(&beige);
+	/* Set the initial position of the ball */
+		write_position(&initial_position);
 
 	return 0;
 
