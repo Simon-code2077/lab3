@@ -74,12 +74,6 @@ static void write_position(vga_ball_position_t *position)
 	dev.position = *position;
 }
 
-static void init_position(vga_ball_position_t *position)
-{
-	iowrite16('0010', BALL_X(dev.virtbase));
-	iowrite16(position->y, BALL_Y(dev.virtbase));
-	dev.position = *position;
-}
 
 /*
  * Handle ioctl() calls from userspace:
@@ -96,7 +90,6 @@ static long vga_ball_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
 				   sizeof(vga_ball_arg_t)))
 			return -EACCES;
 		write_background(&vla.background);
-		init_position(&dev.position); // Ensure position is initialized
 		break;
 
 	case VGA_BALL_READ_BACKGROUND:
@@ -147,7 +140,7 @@ static struct miscdevice vga_ball_misc_device = {
 static int __init vga_ball_probe(struct platform_device *pdev)
 {
         vga_ball_color_t beige = { 0xff, 0xff, 0x0f };
-		vga_ball_position_t initial_position = {16, 16 }; // Center of the screen
+		vga_ball_position_t initial_position = {0x16, 0x16 }; // Center of the screen
 	int ret;
 
 	/* Register ourselves as a misc device: creates /dev/vga_ball */
