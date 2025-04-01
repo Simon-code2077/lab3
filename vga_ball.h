@@ -4,11 +4,11 @@
 #include <linux/ioctl.h>
 
 typedef struct {
-  unsigned char red, green, blue;
+  __uint128_t red, green, blue;
 } vga_ball_color_t;
 
 typedef struct {
-  unsigned char x, y;
+  __uint128_t x, y;
 } vga_ball_position_t;
 
 typedef struct {
