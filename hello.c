@@ -65,7 +65,7 @@ void change_ball_position()
   printf("Current position: %02x %02x\n",
          x, y); // Print current position for debugging
   // Move the ball in a simple pattern
-  x += 10; // Move right
+  x += 100; // Move right
   if (x > 639) { // Wrap around
       x = 0;
       y += 10; // Move down
