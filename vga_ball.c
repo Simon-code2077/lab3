@@ -49,6 +49,7 @@ struct vga_ball_dev {
 	struct resource res; /* Resource: our registers */
 	void __iomem *virtbase; /* Where registers can be accessed in memory */
         vga_ball_color_t background;
+		vga_ball_position_t position; /* Current ball position */
 } dev;
 
 /*
@@ -61,6 +62,23 @@ static void write_background(vga_ball_color_t *background)
 	iowrite16(background->green, BG_GREEN(dev.virtbase) );
 	iowrite16(background->blue, BG_BLUE(dev.virtbase) );
 	dev.background = *background;
+}
+
+/*
+ * Write the ball's position to the device registers. 
+ */
+static void write_position(vga_ball_position_t *position)
+{
+	if (position->x > 639 || position->y > 479) {
+		perror(DRIVER_NAME ": Invalid position (%d, %d)\n",
+		       position->x, position->y);
+		return;
+	}
+	iowrite16(position->x, BALL_X(dev.virtbase));
+	iowrite16(position->y, BALL_Y(dev.virtbase));
+	dev.position = *position;
+	printf(DRIVER_NAME ": Ball position set to (%d, %d)\n",
+		position->x, position->y);
 }
 
 /*
@@ -86,7 +104,21 @@ static long vga_ball_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
 				 sizeof(vga_ball_arg_t)))
 			return -EACCES;
 		break;
+	
+	case VGA_BALL_SET_POSITION: 
+		if (copy_from_user(&vla, (vga_ball_arg_t *) arg,
+				   sizeof(vga_ball_arg_t)))
+			return -EACCES;
+		write_position(&vla.position);
+		break;
 
+	case VGA_BALL_GET_POSITION:
+		vla.position = dev.position;
+		if (copy_to_user((vga_ball_arg_t *) arg, &vla,
+				 sizeof(vga_ball_arg_t)))
+			return -EACCES;
+		break;
+		
 	default:
 		return -EINVAL;
 	}

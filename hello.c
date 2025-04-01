@@ -40,6 +40,35 @@ void set_background_color(const vga_ball_color_t *c)
   }
 }
 
+/* change the ball's position */
+void change_ball_position()
+{
+  vga_ball_arg_t vla;
+  if (ioctl(vga_ball_fd, VGA_BALL_READ_BACKGROUND, &vla)) {
+      perror("ioctl(VGA_BALL_READ_BACKGROUND) failed");
+      return;
+  }
+  x = vla.position.x;
+  y = vla.position.y;
+  // Move the ball in a simple pattern
+  x += 10; // Move right
+  if (x > 639) { // Wrap around
+      x = 0;
+      y += 10; // Move down
+      if (y > 479) {
+          y = 0; // Wrap vertically
+      }
+  }
+
+  vla.position.x = x;
+  vla.position.y = y;
+
+  if (ioctl(vga_ball_fd, VGA_BALL_SET_POSITION, &vla)) {
+      perror("ioctl(VGA_BALL_SET_POSITION) failed");
+      return;
+  }
+}
+
 int main()
 {
   vga_ball_arg_t vla;
@@ -73,6 +102,7 @@ int main()
   for (i = 0 ; i < 24 ; i++) {
     set_background_color(&colors[i % COLORS ]);
     print_background_color();
+
     usleep(400000);
   }
   
