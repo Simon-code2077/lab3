@@ -119,6 +119,19 @@ int main()
     change_ball_position();
     usleep(400000);
   }
+
+  set_background_color(&colors[0]); // set to first color
+  printf("First state: RED");
+  print_background_color();
+  set_background_color(&colors[1]); // set to second color
+  printf("Second state: GREEN\n");
+  print_background_color();
+  set_background_color(&colors[7]); // set to seventh color
+  printf("Seventh state: BLACK\n");
+  print_background_color();
+  set_background_color(&colors[8]); // set to eighth color
+  printf("Eighth state: WHITE\n");
+  print_background_color();
   
   printf("VGA BALL Userspace program terminating\n");
   return 0;
