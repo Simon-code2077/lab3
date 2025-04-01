@@ -44,8 +44,8 @@ void set_background_color(const vga_ball_color_t *c)
 void change_ball_position()
 {
   vga_ball_arg_t vla;
-  if (ioctl(vga_ball_fd, VGA_BALL_READ_BACKGROUND, &vla)) {
-      perror("ioctl(VGA_BALL_READ_BACKGROUND) failed");
+  if (ioctl(vga_ball_fd, VGA_BALL_GET_POSITION, &vla)) {
+      perror("ioctl(VGA_BALL_GET_POSITION) failed");
       return;
   }
   unsigned short x, y;
