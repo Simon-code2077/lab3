@@ -41,8 +41,8 @@
 #define BG_BLUE(x) ((x)+2)
 #define BALL_X_LOW(x) ((x)+3)  /* Ball X coordinate */
 #define BALL_X_HIGH(x) ((x)+4) /* Ball X coordinate */
-#define BALL_Y_HIGH(x) ((x)+5)  /* Ball Y coordinate */
-#define BALL_Y_LOW(x) ((x)+6)  /* Ball Y coordinate */
+#define BALL_Y_LOW(x) ((x)+5)  /* Ball Y coordinate */
+#define BALL_Y_HIGH(x) ((x)+6)  /* Ball Y coordinate */
 /*
  * Information about our device
  */
