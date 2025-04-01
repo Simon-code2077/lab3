@@ -51,6 +51,7 @@ void change_ball_position()
   unsigned short x, y;
   x = vla.position.x;
   y = vla.position.y;
+  printf("Current position: %02x %02x %02x\n",);
   // Move the ball in a simple pattern
   x += 10; // Move right
   if (x > 639) { // Wrap around
@@ -103,7 +104,7 @@ int main()
   for (i = 0 ; i < 24 ; i++) {
     set_background_color(&colors[i % COLORS ]);
     print_background_color();
-
+    change_ball_position();
     usleep(400000);
   }
   
