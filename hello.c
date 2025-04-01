@@ -48,6 +48,7 @@ void change_ball_position()
       perror("ioctl(VGA_BALL_READ_BACKGROUND) failed");
       return;
   }
+  unsigned short x, y;
   x = vla.position.x;
   y = vla.position.y;
   // Move the ball in a simple pattern
