@@ -8,7 +8,7 @@ typedef struct {
 } vga_ball_color_t;
 
 typedef struct {
-  unsigned short x, y;
+  unsigned char x, y;
 } vga_ball_position_t;
 
 typedef struct {

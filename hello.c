@@ -40,6 +40,17 @@ void set_background_color(const vga_ball_color_t *c)
   }
 }
 
+/* Set the background color */
+void set_ball_position(const vga_ball_position_t *c)
+{
+  vga_ball_arg_t vla;
+  vla.position = *c;
+  if (ioctl(vga_ball_fd, VGA_BALL_WRITE_BACKGROUND, &vla)) {
+      perror("ioctl(VGA_BALL_SET_BACKGROUND) failed");
+      return;
+  }
+}
+
 /* change the ball's position */
 void change_ball_position()
 {
