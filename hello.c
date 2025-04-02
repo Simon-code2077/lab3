@@ -70,7 +70,7 @@ bool move_ball(int *a, int *b, vga_ball_position_t *position)
           flag = 1;
       }
       if (new_y > 480) {
-          new_y = 480*2 - new_y
+          new_y = 480*2 - new_y;
           (*b) = (*b) * -1;
           flag = 1;
       }
