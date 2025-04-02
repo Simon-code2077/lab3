@@ -44,7 +44,7 @@ void set_background_color(const vga_ball_color_t *c)
 }
 
 
-bool move_ball(vga_ball_position_t *position)
+bool move_ball(int *a, int *b, vga_ball_position_t *position)
 {
   vga_ball_arg_t vla;
   unsigned short new_x, new_y;
@@ -56,26 +56,26 @@ bool move_ball(vga_ball_position_t *position)
   x = vla.position.x;
   y = vla.position.y;
   int flag = 0;
-  new_x = 2*x - position->x;
-  new_y = 2*y - position->y;
+  new_x = x + *a;
+  new_y = y + *b;
   if (new_x > 640) { // Wrap around
       new_x = 640 - (new_x - 640);
-      x = 640 - (x - 640);
+      *a = *a * -1;
       flag = 1;
   }
   else if (new_x < 0) {
       new_x = 0 - (new_x - 0);
-      x = 0 - (x - 0);
+      *a = *a * -1;
       flag = 1;
   }
   if (new_y > 480) {
       new_y = 480 - (new_y - 480);
-      y = 480 - (y - 480);
+      *b = *b * -1;
       flag = 1;
   }
   else if (new_y < 0) {
       new_y = 0 - (new_y - 0 );
-      y = 0 - (y - 0);
+      *b = *b * -1;
       flag = 1;
   }
   
@@ -148,7 +148,7 @@ int main()
   position.y = position.y - b;
   unsigned char bouncing = 0;
   while (bouncing < 24) {
-    if (move_ball(&position)) {
+    if (move_ball(a, b, &position)) {
       printf("Ball bounced! New position: %04x %04x\n", position.x, position.y);
       set_background_color(&colors[bouncing % COLORS]);
       print_background_color();
