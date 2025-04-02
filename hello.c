@@ -60,18 +60,22 @@ bool move_ball(vga_ball_position_t *position)
   new_y = 2*y - position->y;
   if (new_x > 640) { // Wrap around
       new_x = 640 - (new_x - 640);
+      x = 640 - (x - 640);
       flag = 1;
   }
   else if (new_x < 0) {
       new_x = 0 - (new_x - 0);
+      x = 0 - (x - 0);
       flag = 1;
   }
   if (new_y > 480) {
       new_y = 480 - (new_y - 480);
+      y = 480 - (y - 480);
       flag = 1;
   }
   else if (new_y < 0) {
       new_y = 0 - (new_y - 0 );
+      y = 0 - (y - 0);
       flag = 1;
   }
   
@@ -85,15 +89,15 @@ bool move_ball(vga_ball_position_t *position)
   position->y = y;
   return flag;
 }
-void print_ball(vga_ball_position_t *position)
-{
-  vga_ball_arg_t vla;
-  if (ioctl(vga_ball_fd, VGA_BALL_GET_POSITION, &vla)) {
-      perror("ioctl(VGA_BALL_GET_POSITION) failed");
-      return;
-  }
-  printf("Ball position: %04x %04x\n", vla.position.x, vla.position.y);
-}
+// void print_ball(vga_ball_position_t *position)
+// {
+//   vga_ball_arg_t vla;
+//   if (ioctl(vga_ball_fd, VGA_BALL_GET_POSITION, &vla)) {
+//       perror("ioctl(VGA_BALL_GET_POSITION) failed");
+//       return;
+//   }
+//   printf("Ball position: %04x %04x\n", vla.position.x, vla.position.y);
+// }
 
 void read_ball_position(vga_ball_position_t *position)
 {
@@ -153,28 +157,28 @@ int main()
     else {
       printf("Ball moved! New position: %04x %04x\n", position.x, position.y);
     }
-    usleep(400000);
+    usleep(10000);
   }
 
   // boundry check
-  print_ball(&position);
-  usleep(400000);
-  position.x = 640;
-  position.y = 480;
-  print_ball(&position);
-  usleep(400000);
-  position.x = 0;
-  position.y = 0;
-  print_ball(&position);
-  usleep(400000);
-  position.x = 640;
-  position.y = 0;
-  print_ball(&position);
-  usleep(400000);
-  position.x = 0;
-  position.y = 480;
-  print_ball(&position);
-  usleep(400000);
+  // print_ball(&position);
+  // usleep(400000);
+  // position.x = 640;
+  // position.y = 480;
+  // print_ball(&position);
+  // usleep(400000);
+  // position.x = 0;
+  // position.y = 0;
+  // print_ball(&position);
+  // usleep(400000);
+  // position.x = 640;
+  // position.y = 0;
+  // print_ball(&position);
+  // usleep(400000);
+  // position.x = 0;
+  // position.y = 480;
+  // print_ball(&position);
+  // usleep(400000);
 
   // for (i = 0 ; i < 24 ; i++) {
   //   set_background_color(&colors[i % COLORS ]);
