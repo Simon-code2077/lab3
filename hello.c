@@ -71,20 +71,20 @@ bool move_ball(vga_ball_position_t *position)
   // Move the ball in a simple pattern
   new_x = 2*x - position->x;
   new_y = 2*y - position->y;
-  if (new_x > 639-16) { // Wrap around
-      new_x = 639-16 - (new_x - 639+16);
+  if (new_x > 640) { // Wrap around
+      new_x = 640 - (new_x - 640);
       flag = 1;
   }
-  else if (new_x < 16) {
-      new_x = 16 - (new_x - 16);
+  else if (new_x < 0) {
+      new_x = 0 - (new_x - 0);
       flag = 1;
   }
-  if (new_y > 479-16) {
-      new_y = 479-16 - (new_y - 479+16);
+  if (new_y > 480) {
+      new_y = 480 - (new_y - 480);
       flag = 1;
   }
-  else if (new_y < 16) {
-      new_y = 16 - (new_y - 16);
+  else if (new_y < 0) {
+      new_y = 0 - (new_y - 0 );
       flag = 1;
   }
   
