@@ -60,7 +60,7 @@ bool move_ball(int *a, int *b, vga_ball_position_t *position)
   new_y = y + *b;
   while (new_x>640 || new_x<0 || new_y>480 || new_y<0) {
       if (new_x > 640) {
-          new_x = 640 - (new_x - 640);
+          new_x = 640 - new_x % 640;
           *a = *a * -1;
           flag = 1;
       }
@@ -70,7 +70,7 @@ bool move_ball(int *a, int *b, vga_ball_position_t *position)
           flag = 1;
       }
       if (new_y > 480) {
-          new_y = 480 - (new_y - 480);
+          new_y = 480 - new_y % 480;
           *b = *b * -1;
           flag = 1;
       }
