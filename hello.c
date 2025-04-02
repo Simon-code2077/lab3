@@ -54,7 +54,7 @@ void set_ball_position(const vga_ball_position_t *c)
   }
 }
 
-boolean move_ball(vga_ball_position_t *position)
+bool move_ball(vga_ball_position_t *position)
 {
   vga_ball_arg_t vla;
   unsigned short new_x, new_y;
