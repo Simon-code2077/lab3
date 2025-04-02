@@ -140,21 +140,21 @@ int main()
   print_background_color();
   read_ball_position(&position);
   printf("Initial position: %04x %04x\n", position.x, position.y);
-  position.x = a;
-  position.y = b;
+  position.x = position.x - a;
+  position.y = position.y - b;
   unsigned char bouncing = 0;
-  // while (bouncing < 24) {
-  //   if (move_ball(&position)) {
-  //     printf("Ball bounced! New position: %04x %04x\n", position.x, position.y);
-  //     set_background_color(&colors[bouncing % COLORS]);
-  //     print_background_color();
-  //     bouncing++;
-  //   }
-  //   else {
-  //     printf("Ball moved! New position: %04x %04x\n", position.x, position.y);
-  //   }
-  //   usleep(400000);
-  // }
+  while (bouncing < 24) {
+    if (move_ball(&position)) {
+      printf("Ball bounced! New position: %04x %04x\n", position.x, position.y);
+      set_background_color(&colors[bouncing % COLORS]);
+      print_background_color();
+      bouncing++;
+    }
+    else {
+      printf("Ball moved! New position: %04x %04x\n", position.x, position.y);
+    }
+    usleep(400000);
+  }
 
   // boundry check
   print_ball(&position);
