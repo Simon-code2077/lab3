@@ -152,12 +152,12 @@ int main()
       printf("Ball bounced! New position: %04x %04x\n", position.x, position.y);
       set_background_color(&colors[bouncing % COLORS]);
       print_background_color();
+      bouncing++;
     }
     else {
       printf("Ball moved! New position: %04x %04x\n", position.x, position.y);
     }
     usleep(400000);
-    bouncing++;
   }
   // for (i = 0 ; i < 24 ; i++) {
   //   set_background_color(&colors[i % COLORS ]);
