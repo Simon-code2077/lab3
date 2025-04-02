@@ -115,8 +115,8 @@ void read_ball_position(vga_ball_position_t *position)
 int main()
 {
   srand(time(NULL));  // 初始化随机数种子（只执行一次）
-  int a = rand() % 3;
-  int b = rand() % 3;
+  int a = rand() % 3+1;
+  int b = rand() % 3+1;
   vga_ball_arg_t vla;
   int i;
   static const char filename[] = "/dev/vga_ball";
