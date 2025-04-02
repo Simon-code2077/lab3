@@ -133,7 +133,7 @@ int main()
     // { 0xff, 0xff, 0xff }  /* White */
   };
 
-# define COLORS 9
+# define COLORS 8
 
   printf("VGA ball Userspace program started\n");
 
