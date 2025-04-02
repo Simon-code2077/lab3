@@ -140,8 +140,8 @@ int main()
   print_background_color();
   read_ball_position(&position);
   printf("Initial position: %04x %04x\n", position.x, position.y);
-  position.x = position.x - a;
-  position.y = position.y - b;
+  position.x = a;
+  position.y = b;
   unsigned char bouncing = 0;
   // while (bouncing < 24) {
   //   if (move_ball(&position)) {
