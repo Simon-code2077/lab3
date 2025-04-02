@@ -16,6 +16,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdbool.h>
 
 int vga_ball_fd;
 
@@ -53,7 +54,7 @@ void set_ball_position(const vga_ball_position_t *c)
   }
 }
 
-bool move_ball(vga_ball_position_t *position)
+boolean move_ball(vga_ball_position_t *position)
 {
   vga_ball_arg_t vla;
   unsigned short new_x, new_y;
