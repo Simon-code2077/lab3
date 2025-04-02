@@ -159,7 +159,7 @@ int main()
     else {
       printf("Ball moved! New position: %04x %04x\n", position.x, position.y);
     }
-    usleep(10000);
+    usleep(20000);
   }
 
   // boundry check
