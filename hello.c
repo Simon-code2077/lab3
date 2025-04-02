@@ -58,24 +58,24 @@ bool move_ball(int *a, int *b, vga_ball_position_t *position)
   int flag = 0;
   new_x = x + *a;
   new_y = y + *b;
-  while (new_x>640 || new_x<0 || new_y>480 || new_y<0) {
+  while (new_x>625 || new_x<15 || new_y>465 || new_y<15) {
       if (new_x > 640) {
-          new_x = 640*2 - new_x;
+          new_x = 625*2 - new_x;
           *a = *a * -1;
           flag = 1;
       }
       else if (new_x < 0) {
-          new_x = -new_x;
+          new_x = 15*2 -new_x;
           *a = *a * -1;
           flag = 1;
       }
       if (new_y > 480) {
-          new_y = 480*2 - new_y;
+          new_y = 465*2 - new_y;
           (*b) = (*b) * -1;
           flag = 1;
       }
       else if (new_y < 0) {
-          new_y = - new_y;
+          new_y = 15*2 - new_y;
           *b = *b * -1;
           flag = 1;
       }
