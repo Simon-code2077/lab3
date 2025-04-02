@@ -43,16 +43,6 @@ void set_background_color(const vga_ball_color_t *c)
   }
 }
 
-/* Set the background color */
-void set_ball_position(const vga_ball_position_t *c)
-{
-  vga_ball_arg_t vla;
-  vla.position = *c;
-  if (ioctl(vga_ball_fd, VGA_BALL_WRITE_BACKGROUND, &vla)) {
-      perror("ioctl(VGA_BALL_SET_BACKGROUND) failed");
-      return;
-  }
-}
 
 bool move_ball(vga_ball_position_t *position)
 {
@@ -66,9 +56,6 @@ bool move_ball(vga_ball_position_t *position)
   x = vla.position.x;
   y = vla.position.y;
   int flag = 0;
-  printf("Current position: %02x %02x\n",
-         x, y); // Print current position for debugging
-  // Move the ball in a simple pattern
   new_x = 2*x - position->x;
   new_y = 2*y - position->y;
   if (new_x > 640) { // Wrap around
@@ -97,6 +84,15 @@ bool move_ball(vga_ball_position_t *position)
   position->x = x;
   position->y = y;
   return flag;
+}
+void print_ball(vga_ball_position_t *position)
+{
+  vga_ball_arg_t vla;
+  if (ioctl(vga_ball_fd, VGA_BALL_GET_POSITION, &vla)) {
+      perror("ioctl(VGA_BALL_GET_POSITION) failed");
+      return;
+  }
+  printf("Ball position: %04x %04x\n", vla.position.x, vla.position.y);
 }
 
 void read_ball_position(vga_ball_position_t *position)
@@ -147,18 +143,39 @@ int main()
   position.x = position.x - a;
   position.y = position.y - b;
   unsigned char bouncing = 0;
-  while (bouncing < 24) {
-    if (move_ball(&position)) {
-      printf("Ball bounced! New position: %04x %04x\n", position.x, position.y);
-      set_background_color(&colors[bouncing % COLORS]);
-      print_background_color();
-      bouncing++;
-    }
-    else {
-      printf("Ball moved! New position: %04x %04x\n", position.x, position.y);
-    }
-    usleep(400000);
-  }
+  // while (bouncing < 24) {
+  //   if (move_ball(&position)) {
+  //     printf("Ball bounced! New position: %04x %04x\n", position.x, position.y);
+  //     set_background_color(&colors[bouncing % COLORS]);
+  //     print_background_color();
+  //     bouncing++;
+  //   }
+  //   else {
+  //     printf("Ball moved! New position: %04x %04x\n", position.x, position.y);
+  //   }
+  //   usleep(400000);
+  // }
+
+  // boundry check
+  print_ball(&position);
+  usleep(400000);
+  position.x = 640;
+  position.y = 480;
+  print_ball(&position);
+  usleep(400000);
+  position.x = 0;
+  position.y = 0;
+  print_ball(&position);
+  usleep(400000);
+  position.x = 640;
+  position.y = 0;
+  print_ball(&position);
+  usleep(400000);
+  position.x = 0;
+  position.y = 480;
+  print_ball(&position);
+  usleep(400000);
+
   // for (i = 0 ; i < 24 ; i++) {
   //   set_background_color(&colors[i % COLORS ]);
   //   print_background_color();
