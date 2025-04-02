@@ -14,6 +14,8 @@
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <time.h>
 
 int vga_ball_fd;
 
@@ -62,6 +64,7 @@ bool move_ball(vga_ball_position_t *position)
   unsigned short x, y;
   x = vla.position.x;
   y = vla.position.y;
+  int flag = 0;
   printf("Current position: %02x %02x\n",
          x, y); // Print current position for debugging
   // Move the ball in a simple pattern
@@ -69,15 +72,19 @@ bool move_ball(vga_ball_position_t *position)
   new_y = 2*y - position->y;
   if (new_x > 639-16) { // Wrap around
       new_x = 639-16 - (new_x - 639+16);
+      flag = 1;
   }
   else if (new_x < 16) {
       new_x = 16 - (new_x - 16);
+      flag = 1;
   }
   if (new_y > 479-16) {
       new_y = 479-16 - (new_y - 479+16);
+      flag = 1;
   }
   else if (new_y < 16) {
       new_y = 16 - (new_y - 16);
+      flag = 1;
   }
   
   vla.position.x = new_x;
@@ -88,6 +95,7 @@ bool move_ball(vga_ball_position_t *position)
   }
   position->x = x;
   position->y = y;
+  return flag;
 }
 
 void read_ball_position(vga_ball_position_t *position)
@@ -103,6 +111,9 @@ void read_ball_position(vga_ball_position_t *position)
 
 int main()
 {
+  srand(time(NULL));  // 初始化随机数种子（只执行一次）
+  int a = rand() % 50;
+  int b = rand() % 50;
   vga_ball_arg_t vla;
   int i;
   static const char filename[] = "/dev/vga_ball";
@@ -132,9 +143,18 @@ int main()
   print_background_color();
   read_ball_position(&position);
   printf("Initial position: %04x %04x\n", position.x, position.y);
+  position.x = position.x - a;
+  position.y = position.y - b;
   unsigned char bouncing = 0;
   while (bouncing < 24) {
-    move_ball(&position);
+    if (move_ball(&position)) {
+      printf("Ball bounced! New position: %04x %04x\n", position.x, position.y);
+      set_background_color(&colors[bouncing % COLORS]);
+      print_background_color();
+    }
+    else {
+      printf("Ball moved! New position: %04x %04x\n", position.x, position.y);
+    }
     usleep(400000);
     bouncing++;
   }
