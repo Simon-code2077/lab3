@@ -148,7 +148,7 @@ int main()
   position.y = position.y - b;
   unsigned char bouncing = 0;
   while (bouncing < 24) {
-    if (move_ball(a, b, &position)) {
+    if (move_ball(&a, &b, &position)) {
       printf("Ball bounced! New position: %04x %04x\n", position.x, position.y);
       set_background_color(&colors[bouncing % COLORS]);
       print_background_color();
