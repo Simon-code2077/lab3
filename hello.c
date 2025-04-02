@@ -51,13 +51,13 @@ void set_ball_position(const vga_ball_position_t *c)
   }
 }
 
-/* change the ball's position */
-void change_ball_position()
+bool move_ball(vga_ball_position_t *position)
 {
   vga_ball_arg_t vla;
+  unsigned short new_x, new_y;
   if (ioctl(vga_ball_fd, VGA_BALL_GET_POSITION, &vla)) {
       perror("ioctl(VGA_BALL_GET_POSITION) failed");
-      return;
+      return false;
   }
   unsigned short x, y;
   x = vla.position.x;
@@ -65,22 +65,40 @@ void change_ball_position()
   printf("Current position: %02x %02x\n",
          x, y); // Print current position for debugging
   // Move the ball in a simple pattern
-  x += 100; // Move right
-  if (x > 639) { // Wrap around
-      x = 0;
-      y += 50; // Move down
-      if (y > 479) {
-          y = 0; // Wrap vertically
-      }
+  new_x = 2*x - position->x;
+  new_y = 2*y - position->y;
+  if (new_x > 639-16) { // Wrap around
+      new_x = 639-16 - (new_x - 639+16);
   }
-
-  vla.position.x = x;
-  vla.position.y = y;
-
+  else if (new_x < 16) {
+      new_x = 16 - (new_x - 16);
+  }
+  if (new_y > 479-16) {
+      new_y = 479-16 - (new_y - 479+16);
+  }
+  else if (new_y < 16) {
+      new_y = 16 - (new_y - 16);
+  }
+  
+  vla.position.x = new_x;
+  vla.position.y = new_y;
   if (ioctl(vga_ball_fd, VGA_BALL_SET_POSITION, &vla)) {
       perror("ioctl(VGA_BALL_SET_POSITION) failed");
+      return false;
+  }
+  position->x = x;
+  position->y = y;
+}
+
+void read_ball_position(vga_ball_position_t *position)
+{
+  vga_ball_arg_t vla;
+  if (ioctl(vga_ball_fd, VGA_BALL_GET_POSITION, &vla)) {
+      perror("ioctl(VGA_BALL_GET_POSITION) failed");
       return;
   }
+  position->x = vla.position.x;
+  position->y = vla.position.y;
 }
 
 int main()
@@ -109,35 +127,42 @@ int main()
     fprintf(stderr, "could not open %s\n", filename);
     return -1;
   }
-
+  vga_ball_position_t position;
   printf("initial state: \n");
   print_background_color();
-
-  for (i = 0 ; i < 24 ; i++) {
-    set_background_color(&colors[i % COLORS ]);
-    print_background_color();
-    change_ball_position();
+  read_ball_position(&position);
+  printf("Initial position: %04x %04x\n", position.x, position.y);
+  unsigned char bouncing = 0;
+  while (bouncing < 24) {
+    move_ball(&position);
     usleep(400000);
+    bouncing++;
   }
+  // for (i = 0 ; i < 24 ; i++) {
+  //   set_background_color(&colors[i % COLORS ]);
+  //   print_background_color();
+  //   change_ball_position();
+  //   usleep(400000);
+  // }
 
-  set_background_color(&colors[0]); // set to first color
-  printf("First state: RED\n");
-  print_background_color();
+  // set_background_color(&colors[0]); // set to first color
+  // printf("First state: RED\n");
+  // print_background_color();
 
-  usleep(400000);
-  set_background_color(&colors[1]); // set to second color
-  printf("Second state: GREEN\n");
-  print_background_color();
+  // usleep(400000);
+  // set_background_color(&colors[1]); // set to second color
+  // printf("Second state: GREEN\n");
+  // print_background_color();
 
-  usleep(400000);
-  set_background_color(&colors[7]); // set to seventh color
-  printf("Seventh state: BLACK\n");
-  print_background_color();
-  usleep(400000);
-  set_background_color(&colors[8]); // set to eighth color
-  printf("Eighth state: WHITE\n");
-  print_background_color();
-  usleep(400000);
+  // usleep(400000);
+  // set_background_color(&colors[7]); // set to seventh color
+  // printf("Seventh state: BLACK\n");
+  // print_background_color();
+  // usleep(400000);
+  // set_background_color(&colors[8]); // set to eighth color
+  // printf("Eighth state: WHITE\n");
+  // print_background_color();
+  // usleep(400000);
   
   printf("VGA BALL Userspace program terminating\n");
   return 0;
