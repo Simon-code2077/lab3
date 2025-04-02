@@ -47,7 +47,7 @@ void set_background_color(const vga_ball_color_t *c)
 bool move_ball(int *a, int *b, vga_ball_position_t *position)
 {
   vga_ball_arg_t vla;
-  unsigned short new_x, new_y;
+  int new_x, new_y;
   if (ioctl(vga_ball_fd, VGA_BALL_GET_POSITION, &vla)) {
       perror("ioctl(VGA_BALL_GET_POSITION) failed");
       return false;
@@ -60,22 +60,22 @@ bool move_ball(int *a, int *b, vga_ball_position_t *position)
   new_y = y + *b;
   while (new_x>640 || new_x<0 || new_y>480 || new_y<0) {
       if (new_x > 640) {
-          new_x = 640 - new_x % 640;
+          new_x = 640*2 - new_x;
           *a = *a * -1;
           flag = 1;
       }
       else if (new_x < 0) {
-          new_x = new_x % 640;
+          new_x = -new_x;
           *a = *a * -1;
           flag = 1;
       }
       if (new_y > 480) {
-          new_y = 480 - new_y % 480;
+          new_y = 480*2 - new_y
           *b = *b * -1;
           flag = 1;
       }
       else if (new_y < 0) {
-          new_y = new_y % 480;
+          new_y = - new_y;
           *b = *b * -1;
           flag = 1;
       }
